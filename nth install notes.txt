@@ -1,0 +1,161 @@
+nth install notes
+
+#terminal ASCII art
+sudo nano /etc/motd
+
+           _|      _|
+_|_|_|   _|_|_|_|  _|_|_|
+_|    _|   _|      _|    _|
+_|    _|   _|      _|    _|
+_|    _|     _|_|  _|    _|   by denki-oto
+
+
+
+config.txt
+#add
+
+# compile dts overlay
+
+wget https://raw.githubusercontent.com/okyeron/nth/main/nth-buttons-encoders-overlay.dts
+sudo dtc -W no-unit_address_vs_reg -@ -I dts -O dtb -o /boot/overlays/nth-buttons-encoders-overlay.dtbo nth-buttons-encoders-overlay.dts
+# ignore warning
+
+# display details
+https://www.waveshare.com/wiki/5inch_DSI_LCD
+https://www.raspberrypi.org/documentation/accessories/display.html#tips-and-tricks
+
+sudo raspi-config 
+
+# set display options -> underscan to yes
+
+# on Raspberry Pi OS 5.4
+# Rotate display in Desktop > Preferences > Screen Configuration
+
+# Edit 40-libinput.conf for touch screen rotation
+# Reference: https://github.com/swkim01/waveshare-dtoverlays
+
+sudo nano /usr/share/X11/xorg.conf.d/40-libinput.conf
+
+# add to touchscreen entry
+
+Option "TransformationMatrix" "-1 0 1 0 -1 1 0 0 1"
+
+```
+Section "InputClass"
+        Identifier "libinput touchscreen catchall"
+        MatchIsTouchscreen "on"
+        MatchDevicePath "/dev/input/event*"
+        Driver "libinput"
+        Option "TransformationMatrix" "-1 0 1 0 -1 1 0 0 1"
+EndSection
+```
+
+# if the pi desktop does not have
+
+
+#install packages
+
+sudo apt-get update
+sudo apt-get -y install vim git bc i2c-tools input-utils libncurses5-dev alsa-utils libi2c-dev
+sudo apt-get -y install python3-pip
+
+sudo apt install --no-install-recommends jackd2
+sudo apt-get install libboost1.67-dev libjack-jackd2-dev
+sudo apt install -y libnanomsg-dev supercollider-language supercollider-server supercollider-supernova supercollider-dev 
+sudo apt install -y sc3-plugins ladspalist 
+sudo apt install -y liblua5.3-dev libudev-dev libevdev-dev liblo-dev libcairo2-dev liblua5.3-dev libavahi-compat-libdnssd-dev libasound2-dev 
+sudo apt install usbmount
+
+# patchage
+sudo apt-get install -y patchage
+
+# OpenFrameworks
+sudo apt-get install -y xorg xorg-dev libx11-dev libluajit-5.1-dev swig mesa-utils libgl1-mesa-glx libgles2-mesa libgles2-mesa-dev libegl1-mesa-dev libgbm-dev dphys-swapfile libffi-dev
+
+# SDL2
+sudo apt-get install -y libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev
+
+# joyosc
+sudo apt-get install -y libtinyxml2-dev
+
+# monome stuff (optional?)
+sudo apt install -y libmonome-dev serialosc
+
+
+## my fork of ttymidi
+git clone https://github.com/okyeron/ttymidi
+ 
+Compare with changes on https://github.com/oxytu/ttymidi and https://github.com/owenosborn/ttymidi
+
+## run with 
+
+ttymidi -s /dev/ttyAMA0 &
+
+
+## amidiminder https://github.com/mzero/amidiminder
+git clone https://github.com/mzero/amidiminder.git
+cd amidiminder
+make
+sudo dpkg -i build/amidiminder.deb
+
+
+# remove modemmanager ?
+sudo apt-get remove -y modemmanager
+
+
+## EYESY
+
+git clone https://github.com/okyeron/EYESY_OS_for_RasPi.git Eyesy
+cd Eyesy
+./deploy.sh
+
+
+### M8 headless
+
+sudo apt update && sudo apt install -y git gcc make libsdl2-dev libserialport-dev
+
+hw:CARD=sndrpiproto,DEV=0
+hw:CARD=M8,DEV=0
+
+/usr/bin/jackd -R -P 95 -d alsa -d hw:0 -r 48000 -n 3 -p 512 -S -s &
+
+
+https://github.com/laamaa/m8c
+
+jackd -d alsa -d hw:M8 -r44100 -p512 &
+alsa_out -j m8out -d hw:0 -r 44100 &
+jack_connect system:capture_1 m8out:playback_1
+jack_connect system:capture_2 m8out:playback_2
+
+
+jackd -d alsa -d hw:M8 -r48000 -p512 &
+alsa_out -j m8out -d hw:0 -r48000 &
+jack_connect system:capture_1 m8out:playback_1
+jack_connect system:capture_2 m8out:playback_2
+
+
+# Catia
+sudo apt-get install apt-transport-https gpgv
+sudo dpkg --purge kxstudio-repos-gcc5
+
+wget http://ppa.launchpad.net/kxstudio-debian/apps/ubuntu/pool/main/c/cadence/cadence-data_0.9.1_all.deb
+wget http://ppa.launchpad.net/kxstudio-debian/apps/ubuntu/pool/main/c/cadence/cadence-tools_0.9.1_armhf.deb
+wget http://ppa.launchpad.net/kxstudio-debian/apps/ubuntu/pool/main/c/cadence/catia_0.9.1_all.deb
+
+sudo apt-get install ./cadence-data_0.9.1_all.deb 
+sudo apt-get install ./cadence-tools_0.9.1_armhf.deb 
+sudo apt-get install ./catia_0.9.1_all.deb 
+rm *.deb
+
+### ????
+### NuiLite
+
+git clone https://github.com/TheTechnobear/NuiLite.git
+cd NuiLite
+mkdir build
+cd build
+cmake configure ..
+make
+
+pi@raspberrypi:~/NuiLite/build/release/lib $ sudo cp libnuilite.so /usr/local/MEC
+pi@raspberrypi:~/NuiLite/build/release/lib $ sudo cp NuiPd.pd_linux /usr/local/MEC
