@@ -1,6 +1,6 @@
-nth install notes
+# nth install notes  
 
-#terminal ASCII art
+### make terminal ASCII art
 sudo nano /etc/motd
 
            _|      _|
@@ -9,16 +9,6 @@ _|    _|   _|      _|    _|
 _|    _|   _|      _|    _|
 _|    _|     _|_|  _|    _|   by denki-oto
 
-
-
-config.txt
-#add
-
-# COMPILE DTS OVERLAY
-
-wget https://raw.githubusercontent.com/okyeron/nth/main/nth-buttons-encoders-overlay.dts
-sudo dtc -W no-unit_address_vs_reg -@ -I dts -O dtb -o /boot/overlays/nth-buttons-encoders-overlay.dtbo nth-buttons-encoders-overlay.dts
-# ignore warning
 
 
 ### RASPI-CONFIG
@@ -30,20 +20,27 @@ sudo raspi-config
 # set locale and wifi country
 
 
+### COMPILE DTS OVERLAY
+
+wget https://raw.githubusercontent.com/okyeron/nth/main/nth-buttons-encoders-overlay.dts
+sudo dtc -W no-unit_address_vs_reg -@ -I dts -O dtb -o /boot/overlays/nth-buttons-encoders-overlay.dtbo nth-buttons-encoders-overlay.dts
+# ignore warning
+
 
 ### ROTATE THE DISPLAY
 
+```
 # on Raspberry Pi OS 5.4 +
 # Rotate display in Desktop > Preferences > Screen Configuration
 
 # Edit 40-libinput.conf for touch screen rotation
 # Reference: https://github.com/swkim01/waveshare-dtoverlays
 
-sudo nano /usr/share/X11/xorg.conf.d/40-libinput.conf
+`sudo nano /usr/share/X11/xorg.conf.d/40-libinput.conf`
 
-# add to touchscreen entry
+### add to touchscreen entry
 
-Option "TransformationMatrix" "-1 0 1 0 -1 1 0 0 1"
+`	Option "TransformationMatrix" "-1 0 1 0 -1 1 0 0 1"`
 
 ```
 Section "InputClass"
@@ -55,9 +52,9 @@ Section "InputClass"
 EndSection
 ```
 
-# display details
-https://www.waveshare.com/wiki/5inch_DSI_LCD
-https://www.raspberrypi.org/documentation/accessories/display.html#tips-and-tricks
+### display details 
+	https://www.waveshare.com/wiki/5inch_DSI_LCD  
+	https://www.raspberrypi.org/documentation/accessories/display.html#tips-and-tricks  
 
 
 ### INSTALL PACKAGES
