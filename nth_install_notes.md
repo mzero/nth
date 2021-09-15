@@ -94,7 +94,7 @@ sudo apt install -y libmonome-dev serialosc
 ## my fork of ttymidi
 git clone https://github.com/okyeron/ttymidi
  
-	Compare with changes on https://github.com/oxytu/ttymidi and https://github.com/owenosborn/ttymidi
+	# Compare with changes on https://github.com/oxytu/ttymidi and https://github.com/owenosborn/ttymidi
 	
 	## make it
 	
@@ -105,6 +105,11 @@ git clone https://github.com/okyeron/ttymidi
 	## run with 
 
 	ttymidi -s /dev/ttyAMA0 &
+
+	# install ttymidi service
+	wget https://raw.githubusercontent.com/okyeron/nth/main/ttymidi.service
+	sudo cp -f ttymidi.service /etc/systemd/system/ttymidi.service
+	rm ttymidi.service
 
 
 ## amidiminder https://github.com/mzero/amidiminder
