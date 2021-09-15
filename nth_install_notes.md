@@ -1,5 +1,10 @@
 # nth install notes  
 
+# Start with RasPi OS buster desktop image
+
+`2021-05-07-raspios-buster-armhf.img` is what I used
+
+
 ### make terminal ASCII art  
 
 `sudo nano /etc/motd`
