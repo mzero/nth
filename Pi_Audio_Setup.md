@@ -21,7 +21,9 @@ edit  raspi-blacklist.conf
 
 `sudo nano /etc/modprobe.d/raspi-blacklist.conf`  
 `# add`  
-`blacklist snd_bcm2835`  
+```
+blacklist snd_bcm2835
+```
 
 
 ### create asound.conf
@@ -42,7 +44,7 @@ ctl.!default {
 `sudo nano /usr/share/alsa/alsa.conf `
 
 ```
-# comment out the following 
+# comment out the following lines
 	#pcm.front cards.pcm.front
 	#pcm.rear cards.pcm.rear
 	#pcm.center_lfe cards.pcm.center_lfe
@@ -75,17 +77,20 @@ ctl.!default {
 
 
 ### set mixer values
-# Output Mixer HiFi Playback Switch
-# Line Capture Switch 
-# ADC High Pass Filter Switch
-# Playback Deemphasis Switch
-# Capture Volume
 ```
 amixer cset numid=13 on
 amixer cset numid=4 on 
 amixer cset numid=8 on 
 amixer cset numid=10 on 
 amixer cset numid=3 100% 
+
+# these are 
+# Output Mixer HiFi Playback Switch
+# Line Capture Switch 
+# ADC High Pass Filter Switch
+# Playback Deemphasis Switch
+# Capture Volume
+
 ```
 `sudo alsactl store` 
 
@@ -108,8 +113,6 @@ amixer cset numid=3 100%
 
 
 ### JACK
-
-hw:CARD=sndrpiproto,DEV=0
 
 `/usr/bin/jackd -R -P 95 -d alsa -d hw:0 -r 48000 -n 3 -p 512 -S -s &`
 
