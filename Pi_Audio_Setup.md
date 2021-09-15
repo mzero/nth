@@ -6,6 +6,7 @@
 
 `sudo nano /boot/config.txt`
 
+Add/change the following
 ```
 dtparam=i2c_arm=on
 dtparam=spi=on
@@ -20,7 +21,7 @@ dtparam=audio=off
 edit  raspi-blacklist.conf 
 
 `sudo nano /etc/modprobe.d/raspi-blacklist.conf`  
-`# add`  
+add  
 ```
 blacklist snd_bcm2835
 ```
@@ -29,7 +30,7 @@ blacklist snd_bcm2835
 ### create asound.conf
 sudo nano /etc/asound.conf
 
-`# add`
+add  
 ```
 pcm.!default  {
   type hw card 0
@@ -72,11 +73,20 @@ ctl.!default {
 ### check your device name  
 `aplay -l `
 
+This should look like  
+```
+10.0.1.19 ~ $ aplay -l
+**** List of PLAYBACK Hardware Devices ****
+card 0: sndrpiproto [snd_rpi_proto], device 0: WM8731 HiFi wm8731-hifi-0 [WM8731 HiFi wm8731-hifi-0]
+  Subdevices: 0/1
+  Subdevice #0: subdevice #0
+```
+
 ### check mixer ids  
 `amixer controls`
 
 
-### set mixer values
+### set default mixer values
 ```
 amixer cset numid=13 on
 amixer cset numid=4 on 
@@ -102,19 +112,19 @@ amixer cset numid=3 100%
 `sudo /etc/init.d/alsa-utils restart`
 
 ### test audio  
-`# sine`  
+sine  
 ```
 speaker-test -t sine -f 440 -c 2 -D hw:0,0
 ```
-`# spoken right/left 3 times`  
+spoken right/left 3 times  
 ```
 speaker-test -l 3 -t wav -c 2 -D hw:0,0
 ```
-`# test recording from inputs`  
+test recording from inputs  
 ```
 arecord -f dat -vv -V stereo -d 15 ~/audio-test.wav
 ```
-`# play back recorded file`  
+play back recorded file  
 ```
 aplay -vv -V stereo ~/audio-test.wav
 ```  
