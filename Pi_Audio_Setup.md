@@ -98,18 +98,26 @@ amixer cset numid=3 100%
 ### restart alsa
 `alsactl init`
 
-`# or you can reboot your soundcard directly`
+`# or you can reboot the soundcard directly with `
 `sudo /etc/init.d/alsa-utils restart`
 
 ### test audio  
 `# sine`  
-`speaker-test -t sine -f 440 -c 2 -D hw:0,0`  
+```
+speaker-test -t sine -f 440 -c 2 -D hw:0,0
+```
 `# spoken right/left 3 times`  
-`speaker-test -l 3 -t wav -c 2 -D hw:0,0`
+```
+speaker-test -l 3 -t wav -c 2 -D hw:0,0
+```
 `# test recording from inputs`  
-`arecord -f dat -vv -V stereo -d 15 ~/audio-test.wav`  
+```
+arecord -f dat -vv -V stereo -d 15 ~/audio-test.wav
+```
 `# play back recorded file`  
-`aplay -vv -V stereo ~/audio-test.wav`  
+```
+aplay -vv -V stereo ~/audio-test.wav
+```  
 
 
 ### JACK
