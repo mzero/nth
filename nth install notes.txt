@@ -14,37 +14,26 @@ _|    _|     _|_|  _|    _|   by denki-oto
 config.txt
 #add
 
-# compile dts overlay
+# COMPILE DTS OVERLAY
 
 wget https://raw.githubusercontent.com/okyeron/nth/main/nth-buttons-encoders-overlay.dts
 sudo dtc -W no-unit_address_vs_reg -@ -I dts -O dtb -o /boot/overlays/nth-buttons-encoders-overlay.dtbo nth-buttons-encoders-overlay.dts
 # ignore warning
 
-# display details
-https://www.waveshare.com/wiki/5inch_DSI_LCD
-https://www.raspberrypi.org/documentation/accessories/display.html#tips-and-tricks
+
+### RASPI-CONFIG
 
 sudo raspi-config 
 
-# Bluetooth
-sudo systemctl start bluetooth
-sudo systemctl status bluetooth
-rfkill list
-# if blocked
-sudo rfkill unblock bluetooth
-sudo systemctl restart bluetooth
-
-bluetoothctl
-power on
-scan on
-devices
-pair XX:XX:XX:XX
-trust XX:XX:XX:XX
-connect XX:XX:XX:XX
-
 # set display options -> underscan to yes
 
-# on Raspberry Pi OS 5.4
+# set locale and wifi country
+
+
+
+### ROTATE THE DISPLAY
+
+# on Raspberry Pi OS 5.4 +
 # Rotate display in Desktop > Preferences > Screen Configuration
 
 # Edit 40-libinput.conf for touch screen rotation
@@ -66,10 +55,12 @@ Section "InputClass"
 EndSection
 ```
 
-# if the pi desktop does not have
+# display details
+https://www.waveshare.com/wiki/5inch_DSI_LCD
+https://www.raspberrypi.org/documentation/accessories/display.html#tips-and-tricks
 
 
-#install packages
+### INSTALL PACKAGES
 
 sudo apt-get update
 sudo apt-get -y install vim git bc i2c-tools input-utils libncurses5 alsa-utils libi2c-dev
@@ -104,14 +95,21 @@ touch /etc/pipewire/media-session.d/with-alsa
 ## my fork of ttymidi
 git clone https://github.com/okyeron/ttymidi
  
-Compare with changes on https://github.com/oxytu/ttymidi and https://github.com/owenosborn/ttymidi
+	Compare with changes on https://github.com/oxytu/ttymidi and https://github.com/owenosborn/ttymidi
+	
+	## make it
+	
+	cd ~/ttymidi
+	make
+	sudo make install
 
-## run with 
+	## run with 
 
-ttymidi -s /dev/ttyAMA0 &
+	ttymidi -s /dev/ttyAMA0 &
 
 
 ## amidiminder https://github.com/mzero/amidiminder
+
 git clone https://github.com/mzero/amidiminder.git
 cd amidiminder
 make
@@ -120,6 +118,56 @@ sudo dpkg -i build/amidiminder.deb
 
 # remove modemmanager ?
 sudo apt-get remove -y modemmanager
+
+
+### Audio
+
+
+apt-get remove pulseaudio
+
+
+### MODEP
+curl https://blokas.io/apt-setup.sh | sh
+sudo apt-get install modep
+
+sudo systemctl disable pisound-ctl.service
+sudo systemctl disable pisound-btn.service
+
+change jack.service - or edit /etc/jackdrc
+
+sudo apt-get install modep-common modep-mod-ui modep-mod-host
+
+
+
+## messy full install
+sudo apt-get install devscripts intltool python3-all liblilv-dev
+git clone https://github.com/BlokasLabs/modep-debs.git
+cd modep-debs
+git submodule update --recursive --init 
+
+sudo apt-get --allow-releaseinfo-change update
+cd ~/modep-debs/libhylia 
+sudo apt-get install ./libhylia_1.0.1-1_armhf.deb
+
+
+
+
+### Bluetooth
+
+sudo systemctl start bluetooth
+sudo systemctl status bluetooth
+rfkill list
+# if blocked
+sudo rfkill unblock bluetooth
+sudo systemctl restart bluetooth
+
+bluetoothctl
+power on
+scan on
+devices
+pair XX:XX:XX:XX
+trust XX:XX:XX:XX
+connect XX:XX:XX:XX
 
 
 ## EYESY
