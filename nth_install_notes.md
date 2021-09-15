@@ -30,6 +30,27 @@ sudo dtc -W no-unit_address_vs_reg -@ -I dts -O dtb -o /boot/overlays/nth-button
 # ignore warning
 ```
 
+### Modify boot/config.txt for inputs, etc.
+
+`sudo nano /boot/config.txt`  
+
+See [Pi_Audio_Setup.md](Pi_Audio_Setup.md) for setting up audio  
+
+
+```
+# Buttons and encoders device tree
+dtoverlay=nth-buttons-encoders-overlay
+
+# safe shutdown
+dtoverlay=gpio-shutdown,gpio_pin=26
+
+# MIDI UART
+enable_uart=1
+dtoverlay=pi3-miniuart-bt
+dtoverlay=midi-uart0
+
+```
+
 ### ROTATE THE DISPLAY
 
 ```
@@ -124,10 +145,6 @@ sudo dpkg -i build/amidiminder.deb
 ### remove modemmanager ?
 `sudo apt-get remove -y modemmanager`
 
-
-### Audio
-
-`apt-get remove pulseaudio`  
 
 
 ### MODEP  

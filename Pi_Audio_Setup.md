@@ -66,6 +66,12 @@ ctl.!default {
 	
 `sudo /etc/init.d/alsa-utils restart`  
 
+### remove pulseaudio if it's there  
+
+`apt-get remove pulseaudio`  
+
+
+
 `sudo reboot`
 
 ## Tests

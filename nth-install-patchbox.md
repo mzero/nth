@@ -1,28 +1,29 @@
 # nth patchbox install
 
+```
 # do regular patchbox setup, skip through the Jack settings as we'll do those later.
 # choose option to disable pulseaudio
 # suggest desktop with auto-login
 
 # then startx to get desktop
+```
 
 # nth configs
 
 ### encoder button overlay
-
+```
 wget https://raw.githubusercontent.com/okyeron/nth/main/nth-buttons-encoders-overlay.dts
 sudo dtc -W no-unit_address_vs_reg -@ -I dts -O dtb -o /boot/overlays/nth-buttons-encoders-overlay.dtbo nth-buttons-encoders-overlay.dts
+# ignore warning
+```
 
-# ignore warning if any
 
 
-### DAC Audio Config for WM8731 DAC
+### modify boot/config.txt for DAC, inputs, etc.
 
-####
-# modify boot/config.txt for DAC 
+`sudo nano /boot/config.txt`
 
-sudo nano /boot/config.txt
-
+```
 dtparam=i2c_arm=on
 dtparam=spi=on
 dtparam=i2s=on
@@ -41,20 +42,28 @@ dtoverlay=midi-uart0
 
 # comment out vc4-fkms-v3d
 #dtoverlay=vc4-fkms-v3d
+```
 
-####
 
-# blacklist onboard audio
-# edit  raspi-blacklist.conf 
+### blacklist onboard audio
+edit  raspi-blacklist.conf 
 
-sudo nano /etc/modprobe.d/raspi-blacklist.conf
-	#add
-	blacklist snd_bcm2835
+`sudo nano /etc/modprobe.d/raspi-blacklist.conf`  
+add  
+```
+blacklist snd_bcm2835
+```
 
-# create asound.conf so DAC is default
+### remove pulseaudio if it's there.
+
+`apt-get remove pulseaudio`  
+
+
+### create asound.conf
 sudo nano /etc/asound.conf
 
-#add
+add  
+```
 pcm.!default  {
   type hw card 0
 }
@@ -62,31 +71,47 @@ pcm.!default  {
 ctl.!default {
   type hw card 0
 }
+```
 
-## need to reboot for this to take effect?
 
-# check mixer ids
-amixer controls
+### need to reboot for this to take effect?
+### check mixer ids  
+`amixer controls`
 
-# set mixer values
-amixer -c 0 cset numid=1 114
-amixer -c 0 cset numid=13 on
-amixer -c 0 cset numid=4 on
-amixer -c 0 cset numid=8 on
-amixer -c 0 cset numid=10 on
-amixer -c 0 cset numid=3 100%
 
-sudo alsactl store
+### set default mixer values
+```
+amixer cset numid=13 on
+amixer cset numid=4 on 
+amixer cset numid=8 on 
+amixer cset numid=10 on 
+amixer cset numid=3 100% 
+
+# these are 
+# Output Mixer HiFi Playback Switch
+# Line Capture Switch 
+# ADC High Pass Filter Switch
+# Playback Deemphasis Switch
+# Capture Volume
+
+```
+Save alsa settings  
+
+`sudo alsactl store` 
 
 
 ### re run patchbox to re-configure Jack
 
-# settings are
+```
+# jack settings are
 snd_rpi_proto
 48000
 128
 2
+```
 
+### Other stuff
+```
 sudo apt-get --allow-releaseinfo-change update
 sudo apt update --allow-releaseinfo-change
 sudo apt install xorg
@@ -99,3 +124,5 @@ sudo systemctl disable amidiauto
 git clone https://github.com/mzero/amidiminder.git
 cd amidiminder
 make
+
+```
