@@ -1,31 +1,34 @@
 # nth install notes  
 
-### make terminal ASCII art
-sudo nano /etc/motd
+### make terminal ASCII art  
 
+`sudo nano /etc/motd`
+
+```
            _|      _|
 _|_|_|   _|_|_|_|  _|_|_|
 _|    _|   _|      _|    _|
 _|    _|   _|      _|    _|
 _|    _|     _|_|  _|    _|   by denki-oto
 
-
+```
 
 ### RASPI-CONFIG
 
-sudo raspi-config 
+`sudo raspi-config`  
 
-# set display options -> underscan to yes
+set display options -> underscan to yes
 
-# set locale and wifi country
+set locale and wifi country
 
 
 ### COMPILE DTS OVERLAY
 
+```
 wget https://raw.githubusercontent.com/okyeron/nth/main/nth-buttons-encoders-overlay.dts
 sudo dtc -W no-unit_address_vs_reg -@ -I dts -O dtb -o /boot/overlays/nth-buttons-encoders-overlay.dtbo nth-buttons-encoders-overlay.dts
 # ignore warning
-
+```
 
 ### ROTATE THE DISPLAY
 
@@ -59,6 +62,7 @@ EndSection
 
 ### INSTALL PACKAGES
 
+```
 sudo apt-get update
 sudo apt-get -y install vim git bc i2c-tools input-utils libncurses5 alsa-utils libi2c-dev
 sudo apt-get -y install python3-pip
@@ -85,10 +89,6 @@ sudo apt-get install -y libtinyxml2-dev
 # monome stuff (optional?)
 sudo apt install -y libmonome-dev serialosc
 
-## pipewire
-sudo apt-get -y install pipewire
-touch /etc/pipewire/media-session.d/with-alsa
-
 ## my fork of ttymidi
 git clone https://github.com/okyeron/ttymidi
  
@@ -112,45 +112,36 @@ cd amidiminder
 make
 sudo dpkg -i build/amidiminder.deb
 
+```
 
-# remove modemmanager ?
-sudo apt-get remove -y modemmanager
+### remove modemmanager ?
+`sudo apt-get remove -y modemmanager`
 
 
 ### Audio
 
 
-apt-get remove pulseaudio
+`apt-get remove pulseaudio`  
 
 
 ### MODEP
 curl https://blokas.io/apt-setup.sh | sh
+sudo apt-get update
 sudo apt-get install modep
 
 sudo systemctl disable pisound-ctl.service
 sudo systemctl disable pisound-btn.service
 
-change jack.service - or edit /etc/jackdrc
-
-sudo apt-get install modep-common modep-mod-ui modep-mod-host
+change jack.service - or edit `/etc/jackdrc` - change `hw:pisound` to `hw:0`
 
 
-
-## messy full install
-sudo apt-get install devscripts intltool python3-all liblilv-dev
-git clone https://github.com/BlokasLabs/modep-debs.git
-cd modep-debs
-git submodule update --recursive --init 
-
-sudo apt-get --allow-releaseinfo-change update
-cd ~/modep-debs/libhylia 
-sudo apt-get install ./libhylia_1.0.1-1_armhf.deb
+`sudo apt-get install modep-common modep-mod-ui modep-mod-host`
 
 
 
 
-### Bluetooth
-
+### Bluetooth ?
+```
 sudo systemctl start bluetooth
 sudo systemctl status bluetooth
 rfkill list
@@ -165,17 +156,18 @@ devices
 pair XX:XX:XX:XX
 trust XX:XX:XX:XX
 connect XX:XX:XX:XX
+```
 
+### EYESY
 
-## EYESY
-
+```
 git clone https://github.com/okyeron/EYESY_OS_for_RasPi.git Eyesy
 cd Eyesy
 ./deploy.sh
-
+```
 
 ### M8 headless
-
+```
 sudo apt update && sudo apt install -y git gcc make libsdl2-dev libserialport-dev
 
 hw:CARD=sndrpiproto,DEV=0
@@ -196,30 +188,4 @@ jackd -d alsa -d hw:M8 -r48000 -p512 &
 alsa_out -j m8out -d hw:0 -r48000 &
 jack_connect system:capture_1 m8out:playback_1
 jack_connect system:capture_2 m8out:playback_2
-
-
-# Catia
-sudo apt-get install apt-transport-https gpgv
-sudo dpkg --purge kxstudio-repos-gcc5
-
-wget http://ppa.launchpad.net/kxstudio-debian/apps/ubuntu/pool/main/c/cadence/cadence-data_0.9.1_all.deb
-wget http://ppa.launchpad.net/kxstudio-debian/apps/ubuntu/pool/main/c/cadence/cadence-tools_0.9.1_armhf.deb
-wget http://ppa.launchpad.net/kxstudio-debian/apps/ubuntu/pool/main/c/cadence/catia_0.9.1_all.deb
-
-sudo apt-get install ./cadence-data_0.9.1_all.deb 
-sudo apt-get install ./cadence-tools_0.9.1_armhf.deb 
-sudo apt-get install ./catia_0.9.1_all.deb 
-rm *.deb
-
-### ????
-### NuiLite
-
-git clone https://github.com/TheTechnobear/NuiLite.git
-cd NuiLite
-mkdir build
-cd build
-cmake configure ..
-make
-
-pi@raspberrypi:~/NuiLite/build/release/lib $ sudo cp libnuilite.so /usr/local/MEC
-pi@raspberrypi:~/NuiLite/build/release/lib $ sudo cp NuiPd.pd_linux /usr/local/MEC
+```
