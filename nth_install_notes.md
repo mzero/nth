@@ -122,20 +122,20 @@ sudo dpkg -i build/amidiminder.deb
 
 ### Audio
 
-
 `apt-get remove pulseaudio`  
 
 
-### MODEP
+### MODEP  
+```
 curl https://blokas.io/apt-setup.sh | sh
 sudo apt-get update
 sudo apt-get install modep
 
 sudo systemctl disable pisound-ctl.service
 sudo systemctl disable pisound-btn.service
+```
 
-change jack.service - or edit `/etc/jackdrc` - change `hw:pisound` to `hw:0`
-
+change jack.service - or edit `/etc/jackdrc` - change `hw:pisound` to `hw:0`  
 
 `sudo apt-get install modep-common modep-mod-ui modep-mod-host`
 
