@@ -102,10 +102,12 @@ amixer cset numid=3 100%
 # Capture Volume
 
 ```
+Save alsa settings  
+
 `sudo alsactl store` 
 
 
-### restart alsa
+### restart alsa if needed
 `alsactl init`
 
 `# or you can reboot the soundcard directly with `
